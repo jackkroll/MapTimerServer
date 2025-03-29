@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 import Fluent
 import Vapor
 
@@ -68,7 +67,7 @@ struct Map : Content {
         }
         
     }
-    
+    /*
     func fontStyle() -> Font.Design {
         switch(name) {
         case .KC: return .default
@@ -101,6 +100,7 @@ struct Map : Content {
         case .ED: return .pink
         }
     }
+     */
     
     func isAvailable(at date: Date) -> Bool {
         return availableAt...availableTo ~= date

@@ -37,10 +37,16 @@ struct Rotation {
 
 struct Map : Content {
     var name: MapName
-    var description: String?
     var availableAt: Date
     var availableTo: Date
     let mixtapeMode: MixtapeMode?
+    
+    enum CodingKeys: String, CodingKey {
+            case name
+            case availableAt
+            case availableTo
+            case mixtapeMode
+    }
     
     init(name: MapName, availableAt: Date, availableTo: Date, mixtapeMode: MixtapeMode? = nil) {
         self.name = name
@@ -56,6 +62,8 @@ struct Map : Content {
         self.mixtapeMode = mixtapeMode
     }
     
+
+    
     func mapName() -> String {
         switch(name) {
             case .KC: return "Kings Canyon"
@@ -67,40 +75,6 @@ struct Map : Content {
         }
         
     }
-    /*
-    func fontStyle() -> Font.Design {
-        switch(name) {
-        case .KC: return .default
-        case .WE: return .default
-        case .OL: return .serif
-        case .SP: return .default
-        case .BM: return .default
-        case .ED: return .monospaced
-        }
-    }
-    
-    func mapColorBG() -> Color {
-        switch(name) {
-        case .KC: return .clear
-        case .WE: return .clear
-        case .OL: return .clear
-        case .SP: return .clear
-        case .BM: return .clear
-        case .ED: return .clear
-        }
-    }
-    
-    func mapColorTX() -> Color {
-        switch(name) {
-        case .KC: return .red
-        case .WE: return .green
-        case .OL: return .blue
-        case .SP: return .teal
-        case .BM: return .purple
-        case .ED: return .pink
-        }
-    }
-     */
     
     func isAvailable(at date: Date) -> Bool {
         return availableAt...availableTo ~= date
@@ -117,6 +91,18 @@ struct Map : Content {
     func percentComplete() -> Double {
         let complete = (availableTo.timeIntervalSince1970 - Date.now.timeIntervalSince1970)/(availableTo.timeIntervalSince1970-availableAt.timeIntervalSince1970)
         return complete.truncatingRemainder(dividingBy: 1)
+    }
+}
+
+extension Map: Encodable {
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(availableAt.timeIntervalSince1970, forKey: .availableAt)
+        try container.encode(availableTo.timeIntervalSince1970, forKey: .availableTo)
+        if (mixtapeMode != nil) {
+            try container.encode(mixtapeMode, forKey: .mixtapeMode)
+        }
     }
 }
 

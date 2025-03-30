@@ -98,8 +98,10 @@ extension Map: Encodable {
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
-        try container.encode(availableAt.timeIntervalSince1970, forKey: .availableAt)
-        try container.encode(availableTo.timeIntervalSince1970, forKey: .availableTo)
+        //try container.encode(availableAt.timeIntervalSince1970, forKey: .availableAt)
+        //try container.encode(availableTo.timeIntervalSince1970, forKey: .availableTo)
+        try container.encode(availableAt, forKey: .availableAt)
+        try container.encode(availableTo, forKey: .availableTo)
         if (mixtapeMode != nil) {
             try container.encode(mixtapeMode, forKey: .mixtapeMode)
         }

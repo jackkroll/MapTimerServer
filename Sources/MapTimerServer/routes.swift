@@ -25,16 +25,12 @@ func routes(_ app: Application) throws {
     app.get("pubs","current") { req -> [Map] in
         return mapSchedulePubs.upcomingMaps(at: .now, range: 0...3)
     }
-    /*
-    app.get("pubs", "at", ":date") { req -> Map in
-        guard let dateTime = req.parameters.get("date", as: Double.self) else {
-                throw Abort(.badRequest)
-            }
-        let date = Date.init(timeIntervalSince1970: dateTime)
-        return mapSchedulePubs.determineCurrentMap(at: date)
+    
+    app.get("hash") { req async -> String in
+        //add ltm to hash later :)
+        let hashableContent : String = originPubs.availableAt.description + originRanked.availableAt.description
+        return SHA256.hash(data: Data(hashableContent.utf8)).hex
     }
-    */
-        
     
     app.get("ranked","schedule") { req -> MapSchedule in
         return mapScheduleRanked

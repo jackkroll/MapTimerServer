@@ -6,6 +6,9 @@ func routes(_ app: Application) throws {
     let mapSchedulePubs = MapSchedule(origin: originPubs, rotation: [.ED,.KC,.SP])
     let originRanked = Map(name: .KC, availableAt: 1743094800, availableTo: 1743181200)
     let mapScheduleRanked = MapSchedule(origin: originRanked, rotation: [.ED,.KC,.SP])
+    
+    let aprilFoolsSchedule = MapSchedule(origin: originPubs, rotation: [.SP,.ED,.KC], takeoverName: "April Fools", takeoverSystemImage: "party.popper.fill")
+    let powerSwordSchedule = MapSchedule(origin: originPubs, rotation: [.KC,.SP,.ED], takeoverName: "Power Sword")
     //add season start/end date protections
     
     app.get { req async throws in
@@ -37,6 +40,9 @@ func routes(_ app: Application) throws {
     }
     app.get("ranked","current") { req -> [Map] in
         return mapScheduleRanked.upcomingMaps(at: .now, range: 0...3)
+    }
+    app.get("ltm", "schedule") { req -> [MapSchedule] in
+        return [aprilFoolsSchedule, powerSwordSchedule]
     }
     
 

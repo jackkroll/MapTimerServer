@@ -139,14 +139,21 @@ struct MapSchedule : Content {
     let origin : Map
     let rotation: [MapName]
     let takeoverName: String?
+    let takeoverSystemImage: String?
     
     let rotationInterval: Double
     
-    init(origin: Map, rotation: [MapName], takeoverName: String? = nil) {
+    init(origin: Map, rotation: [MapName], takeoverName: String? = nil, takeoverSystemImage: String? = nil, rotationInterval: Double? = nil) {
         self.origin = origin
         self.rotation = rotation
         self.takeoverName = takeoverName
-        self.rotationInterval = origin.availableTo.timeIntervalSince1970 - origin.availableAt.timeIntervalSince1970
+        self.takeoverSystemImage = takeoverSystemImage
+        if rotationInterval ==  nil {
+            self.rotationInterval = origin.availableTo.timeIntervalSince1970 - origin.availableAt.timeIntervalSince1970
+        }
+        else {
+            self.rotationInterval = rotationInterval!
+        }
     }
     
     func determineCurrentMap(at : Date) -> Map {

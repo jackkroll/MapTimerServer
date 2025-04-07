@@ -3,12 +3,12 @@ import Vapor
 
 func routes(_ app: Application) throws {
     let originPubs = Map(name: .KC, availableAt: 1743240600, availableTo: 1743246000)
-    let mapSchedulePubs = MapSchedule(origin: originPubs, rotation: [.ED,.KC,.SP])
-    let originRanked = Map(name: .KC, availableAt: 1743094800, availableTo: 1743181200)
+    let mapSchedulePubs = MapSchedule(origin: originPubs, rotation: [.KC,.SP,.ED])
+    let originRanked = Map(name: .SP, availableAt: 1743094800, availableTo: 1743181200)
     let mapScheduleRanked = MapSchedule(origin: originRanked, rotation: [.ED,.KC,.SP])
     
-    let aprilFoolsSchedule = MapSchedule(origin: originPubs, rotation: [.SP,.ED,.KC], takeoverName: "April Fools", takeoverSystemImage: "party.popper.fill")
-    let powerSwordSchedule = MapSchedule(origin: originPubs, rotation: [.KC,.SP,.ED], takeoverName: "Power Sword")
+    let aprilFoolsSchedule = MapSchedule(origin: originPubs, rotation: [.KC,.SP,.ED], takeoverName: "April Fools", takeoverSystemImage: "party.popper.fill")
+    let powerSwordSchedule = MapSchedule(origin: originPubs, rotation: [.ED,.KC,.SP], takeoverName: "Power Sword")
     //add season start/end date protections
     
     app.get { req async throws in
@@ -31,7 +31,7 @@ func routes(_ app: Application) throws {
     
     app.get("hash") { req async -> String in
         //add ltm to hash later :)
-        let hashableContent : String = originPubs.availableAt.description + originRanked.availableAt.description
+        let hashableContent : String = originPubs.availableAt.description + originRanked.availableAt.description + aprilFoolsSchedule.takeoverName! + powerSwordSchedule.takeoverName!
         return SHA256.hash(data: Data(hashableContent.utf8)).hex
     }
     
@@ -43,6 +43,9 @@ func routes(_ app: Application) throws {
     }
     app.get("ltm", "schedule") { req -> [MapSchedule] in
         return [aprilFoolsSchedule, powerSwordSchedule]
+    }
+    app.get( "ltm", "current") { req -> [Map] in
+        return [aprilFoolsSchedule.determineCurrentMap(at: .now), powerSwordSchedule.determineCurrentMap(at: .now)]
     }
     
 

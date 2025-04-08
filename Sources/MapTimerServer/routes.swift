@@ -7,8 +7,13 @@ func routes(_ app: Application) throws {
     let originRanked = Map(name: .SP, availableAt: 1743094800, availableTo: 1743181200)
     let mapScheduleRanked = MapSchedule(origin: originRanked, rotation: [.ED,.KC,.SP])
     
-    let aprilFoolsSchedule = MapSchedule(origin: originPubs, rotation: [.KC,.SP,.ED], takeoverName: "April Fools", takeoverSystemImage: "party.popper.fill")
+    let solosSchedule = MapSchedule(origin: originPubs, rotation: [.KC,.SP,.ED], takeoverName: "Solos", takeoverSystemImage: "person.fill")
     let powerSwordSchedule = MapSchedule(origin: originPubs, rotation: [.ED,.KC,.SP], takeoverName: "Power Sword")
+    
+    let beastModeEvent = ModeSchedule(schedules:[PublishableSchedule(schedule: powerSwordSchedule, usable: DateInterval(start: Date(timeIntervalSince1970: 1744131600), end: Date(timeIntervalSince1970: 1744736400)))])
+    let creatorEvent = ModeSchedule(schedules: [PublishableSchedule( schedule: solosSchedule, usable: DateInterval(start: Date(timeIntervalSince1970: 1742922000), end: Date(timeIntervalSince1970: 1744736400)))])
+    
+    
     //add season start/end date protections
     
     app.get { req async throws in
@@ -31,7 +36,7 @@ func routes(_ app: Application) throws {
     
     app.get("hash") { req async -> String in
         //add ltm to hash later :)
-        let hashableContent : String = originPubs.availableAt.description + originRanked.availableAt.description + aprilFoolsSchedule.takeoverName! + powerSwordSchedule.takeoverName!
+        let hashableContent : String = originPubs.availableAt.description + originRanked.availableAt.description + beastModeEvent.hashString() + creatorEvent.hashString()
         return SHA256.hash(data: Data(hashableContent.utf8)).hex
     }
     
@@ -42,10 +47,28 @@ func routes(_ app: Application) throws {
         return mapScheduleRanked.upcomingMaps(at: .now, range: 0...3)
     }
     app.get("ltm", "schedule") { req -> [MapSchedule] in
-        return [aprilFoolsSchedule, powerSwordSchedule]
+        var schedules : [MapSchedule] = []
+        let beastMode = beastModeEvent.currentSchedule(at: .now)
+        let creatorEvent = creatorEvent.currentSchedule(at: .now)
+        if beastMode != nil {
+            schedules.append(beastMode!)
+        }
+        if creatorEvent != nil {
+            schedules.append(creatorEvent!)
+        }
+        return schedules
     }
     app.get( "ltm", "current") { req -> [Map] in
-        return [aprilFoolsSchedule.determineCurrentMap(at: .now), powerSwordSchedule.determineCurrentMap(at: .now)]
+        var schedules : [Map] = []
+        let beastMode = beastModeEvent.currentSchedule(at: .now)
+        let creatorEvent = creatorEvent.currentSchedule(at: .now)
+        if beastMode != nil {
+            schedules.append(beastMode!.determineCurrentMap(at: .now))
+        }
+        if creatorEvent != nil {
+            schedules.append(creatorEvent!.determineCurrentMap(at: .now))
+        }
+        return schedules
     }
     
 

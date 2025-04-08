@@ -181,6 +181,36 @@ struct MapSchedule : Content {
         }
         return maps
     }
+    
+    func hashString() -> String {
+        return "\(origin.mapName()),\(origin.availableAt),\(origin.availableTo),\(rotationInterval),\(rotation)"
+    }
+}
+
+struct PublishableSchedule {
+    var schedule : MapSchedule
+    var usable : DateInterval
+    
+    func isUsable(at date : Date) -> Bool {
+        return usable.contains(date)
+    }
+}
+
+struct ModeSchedule {
+    var schedules : [PublishableSchedule]
+    
+    func currentSchedule(at date : Date) -> MapSchedule? {
+        for schedule in schedules {
+            if schedule.isUsable(at: date) {
+                return schedule.schedule
+            }
+        }
+        return nil
+    }
+    
+    func hashString() -> String {
+        return currentSchedule(at: .now)?.hashString() ?? "nil"
+    }
 }
 
 struct GameRotation {

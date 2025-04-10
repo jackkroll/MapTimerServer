@@ -13,6 +13,12 @@ func routes(_ app: Application) throws {
     let beastModeEvent = ModeSchedule(schedules:[PublishableSchedule(schedule: powerSwordSchedule, usable: DateInterval(start: Date(timeIntervalSince1970: 1744131600), end: Date(timeIntervalSince1970: 1744736400)))])
     let creatorEvent = ModeSchedule(schedules: [PublishableSchedule( schedule: solosSchedule, usable: DateInterval(start: Date(timeIntervalSince1970: 1742922000), end: Date(timeIntervalSince1970: 1744736400)))])
     
+    let epgExtreme = MapSchedule(origin: originPubs, rotation: [.KC,.SP,.ED], takeoverName: "EPG Extreme", takeoverSystemImage: "exclamationmark.shield.fill")
+    let straightShotQuads = MapSchedule(origin: originPubs, rotation: [.KC,.SP,.ED], takeoverName: "Straight Shot Quads", takeoverSystemImage: "clock.arrow.trianglehead.2.counterclockwise.rotate.90")
+    
+    let fightForeceEvent = ModeSchedule(schedules: [PublishableSchedule( schedule: epgExtreme, usable: DateInterval(start: Date(timeIntervalSince1970: 1744736400), end: Date(timeIntervalSince1970: 1745946000))),
+                                                   PublishableSchedule(schedule: straightShotQuads, usable: DateInterval(start: Date(timeIntervalSince1970: 1745946000), end: Date(timeIntervalSince1970: 1746464400)))])
+    
     
     //add season start/end date protections
     
@@ -50,11 +56,15 @@ func routes(_ app: Application) throws {
         var schedules : [MapSchedule] = []
         let beastMode = beastModeEvent.currentSchedule(at: .now)
         let creatorEvent = creatorEvent.currentSchedule(at: .now)
+        let fightForceEvent = fightForeceEvent.currentSchedule(at: .now)
         if beastMode != nil {
             schedules.append(beastMode!)
         }
         if creatorEvent != nil {
             schedules.append(creatorEvent!)
+        }
+        if fightForceEvent != nil {
+            schedules.append(fightForceEvent!)
         }
         return schedules
     }
@@ -62,11 +72,15 @@ func routes(_ app: Application) throws {
         var schedules : [Map] = []
         let beastMode = beastModeEvent.currentSchedule(at: .now)
         let creatorEvent = creatorEvent.currentSchedule(at: .now)
+        let fightForceEvent = fightForeceEvent.currentSchedule(at: .now)
         if beastMode != nil {
             schedules.append(beastMode!.determineCurrentMap(at: .now))
         }
         if creatorEvent != nil {
             schedules.append(creatorEvent!.determineCurrentMap(at: .now))
+        }
+        if fightForceEvent != nil {
+            schedules.append(fightForceEvent!.determineCurrentMap(at: .now))
         }
         return schedules
     }

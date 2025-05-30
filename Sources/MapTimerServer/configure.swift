@@ -21,7 +21,7 @@ public func configure(_ app: Application) async throws {
     app.migrations.add(CreateTodo())
      */
     app.views.use(.leaf)
-    app.http.server.configuration.port = 8090
+    app.http.server.configuration.port = 8080
     // register routes
     try routes(app)
 }

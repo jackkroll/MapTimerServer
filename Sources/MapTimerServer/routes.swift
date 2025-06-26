@@ -7,10 +7,10 @@ func routes(_ app: Application) throws {
     let originRanked = Map(name: .OL, availableAt: 1743094800, availableTo: 1743181200)
     let mapScheduleRanked = MapSchedule(origin: originRanked, rotation: [.OL,.SP,.WE])
     
-    let originPubsMid = Map(name: .BM, availableAt: 1750692600, availableTo: 1750784400)
+    let originPubsMid = Map(name: .BM, availableAt: 1750881600, availableTo: 1750887000)
     let mapSchedulePubsMid = MapSchedule(origin: originPubsMid, rotation: [.KC,.WE,.BM])
     let originRankedMid = Map(name: .BM, availableAt: 1750698000, availableTo: 1750784400)
-    let mapScheduleRankedMid = MapSchedule(origin: originRankedMid, rotation: [.KC,.WE,.BM])
+    let mapScheduleRankedMid = MapSchedule(origin: originRankedMid, rotation: [.BM,.KC,.WE])
     /*
     let epgExtreme = MapSchedule(origin: originPubs, rotation: [.KC,.SP,.ED], takeoverName: "EPG Extreme", takeoverSystemImage: "exclamationmark.shield.fill")
     let straightShotQuads = MapSchedule(origin: originPubs, rotation: [.KC,.SP,.ED], takeoverName: "Straight Shot Quads", takeoverSystemImage: "clock.arrow.trianglehead.2.counterclockwise.rotate.90")

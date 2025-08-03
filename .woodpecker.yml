@@ -1,0 +1,33 @@
+kind: pipeline
+type: docker
+name: build-and-deploy-maptimer
+
+steps:
+  - name: build-and-deploy
+    image: docker:20.10.16-cli
+    privileged: true
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    commands:
+      # Build the Docker image with a tag
+      - docker build -t maptimer:latest .
+
+      # Stop and remove the old container if it exists
+      - docker stop maptimerserver || true
+      - docker rm maptimerserver || true
+
+      # Run the new container with Cloudflare tunnel labels, ports, and restart policy
+      - docker run -d \
+          --name maptimerserver \
+          --restart unless-stopped \
+          -p 8080:8080 \
+          --label cloudflare.tunnel.enable=true \
+          --label cloudflare.tunnel.hostname=map.jackk.dev \
+          --label cloudflare.tunnel.service=http://192.168.1.165:8080 \
+          maptimer:latest
+
+volumes:
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock

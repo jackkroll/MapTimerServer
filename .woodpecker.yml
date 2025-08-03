@@ -1,7 +1,7 @@
+---
 kind: pipeline
 type: docker
 name: build-maptimer-image
-
 steps:
   - name: build-image
     image: docker:20.10.16-cli
@@ -11,7 +11,6 @@ steps:
         path: /var/run/docker.sock
     commands:
       - docker build -t maptimer:latest .
-
 volumes:
   - name: dockersock
     host:

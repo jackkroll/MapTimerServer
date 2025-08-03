@@ -1,9 +1,9 @@
 kind: pipeline
 type: docker
-name: build-and-deploy-maptimer
+name: build-maptimer-image
 
 steps:
-  - name: build-and-deploy
+  - name: build-image
     image: docker:20.10.16-cli
     privileged: true
     volumes:
@@ -11,15 +11,6 @@ steps:
         path: /var/run/docker.sock
     commands:
       - docker build -t maptimer:latest .
-      - docker stop maptimerserver || true
-      - docker rm maptimerserver || true
-      - >
-        docker run -d --name maptimerserver --restart unless-stopped
-        -p 8080:8080
-        --label cloudflare.tunnel.enable=true
-        --label cloudflare.tunnel.hostname=map.jackk.dev
-        --label cloudflare.tunnel.service=http://192.168.1.165:8080
-        maptimer:latest
 
 volumes:
   - name: dockersock

@@ -3,9 +3,9 @@ import Vapor
 
 func routes(_ app: Application) throws {
     let originPubs = Map(name: .SP, availableAt: 1754407800, availableTo: 1754413200)
-    let mapSchedulePubs = MapSchedule(origin: originPubs, rotation: [.BM,.ED,.SP])
+    let mapSchedulePubs = MapSchedule(origin: originPubs, rotation: [.SP,.ED,.BM])
     let originRanked = Map(name: .SP, availableAt: 1754326800, availableTo: 1754413200)
-    let mapScheduleRanked = MapSchedule(origin: originRanked, rotation: [.BM,.ED,.SP])
+    let mapScheduleRanked = MapSchedule(origin: originRanked, rotation: [.SP,.ED,.BM])
 
     /*
     let epgExtreme = MapSchedule(origin: originPubs, rotation: [.KC,.SP,.ED], takeoverName: "EPG Extreme", takeoverSystemImage: "exclamationmark.shield.fill")

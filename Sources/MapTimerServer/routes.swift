@@ -2,10 +2,10 @@ import Fluent
 import Vapor
 
 func routes(_ app: Application) throws {
-    let originPubs = Map(name: .SP, availableAt: 1754407800, availableTo: 1754413200)
-    let mapSchedulePubs = MapSchedule(origin: originPubs, rotation: [.SP,.ED,.BM])
-    let originRanked = Map(name: .SP, availableAt: 1754326800, availableTo: 1754413200)
-    let mapScheduleRanked = MapSchedule(origin: originRanked, rotation: [.SP,.ED,.BM])
+    let originPubs = Map(name: .OL, availableAt: 1758490200, availableTo: 1758495600)
+    let mapSchedulePubs = MapSchedule(origin: originPubs, rotation: [.OL,.ED,.KC])
+    let originRanked = Map(name: .ED, availableAt: 1758387600, availableTo: 1758474000)
+    let mapScheduleRanked = MapSchedule(origin: originRanked, rotation: [.ED,.KC,.OL])
 
     /*
     let epgExtreme = MapSchedule(origin: originPubs, rotation: [.KC,.SP,.ED], takeoverName: "EPG Extreme", takeoverSystemImage: "exclamationmark.shield.fill")
